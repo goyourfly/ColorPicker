@@ -24,10 +24,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
+import com.jaredrummler.android.colorpicker.ColorPickerViewHelper;
 
 public class MainActivity extends AppCompatActivity implements ColorPickerDialogListener {
 
@@ -39,9 +41,23 @@ public class MainActivity extends AppCompatActivity implements ColorPickerDialog
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    if (savedInstanceState == null) {
-      getSupportFragmentManager().beginTransaction().add(android.R.id.content, new DemoFragment()).commit();
-    }
+//    if (savedInstanceState == null) {
+//      getSupportFragmentManager().beginTransaction().add(android.R.id.content, new DemoFragment()).commit();
+//    }
+
+    ColorPickerViewHelper
+            .newBuilder()
+            .attach(this.getApplicationContext(), (ViewGroup) findViewById(android.R.id.content)).setColorPickerDialogListener(new ColorPickerDialogListener() {
+      @Override
+      public void onColorSelected(int dialogId, int color) {
+        Toast.makeText(MainActivity.this,"Color:" + color,Toast.LENGTH_LONG).show();
+      }
+
+      @Override
+      public void onDialogDismissed(int dialogId) {
+        finish();
+      }
+    });
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
